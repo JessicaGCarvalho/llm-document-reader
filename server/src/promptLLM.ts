@@ -1,4 +1,6 @@
 import { openai } from "./openai";
+import { financeService } from "./services/financeService";
+import { hrService } from "./services/hrService";
 export type LLMResult =
   | {
       service: string;
@@ -7,6 +9,7 @@ export type LLMResult =
   | "no_matching_service";
 
 export async function promptLLM(documentText: string): Promise<LLMResult> {
+  const serviceList = [financeService, hrService];
   const systemPrompt = `
     You are an intelligent document classification and extraction assistant. 
     Your task is to analyze a provided document and determine which of the available services it relates to. 
@@ -15,15 +18,7 @@ export async function promptLLM(documentText: string): Promise<LLMResult> {
 
     Available Services and Output Formats:
 
-    1. Finance Service – Process Invoices:  
-    Trigger this if the document appears to be an invoice.  
-    Output format:  
-    {"service": "financeService", "input": { "invoiceAmount": number }}
-
-    2. HR Service – Process Resume:  
-    Trigger this if the document appears to be a resume.  
-    Output format:  
-    {"service": "hrService", "input": { "candidateName": "string", "candidateEmail": "string", "candidatePhone": number }}
+    ${serviceList.map((service) => service.toPromptString()).join("\n")}
 
     Instructions:
 
@@ -54,8 +49,6 @@ export async function promptLLM(documentText: string): Promise<LLMResult> {
   if (!result) {
     throw new Error("LLM failed.");
   }
-
-  console.log(result);
 
   if (result === "no_matching_service") return result;
 

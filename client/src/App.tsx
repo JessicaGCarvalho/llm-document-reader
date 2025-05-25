@@ -11,7 +11,7 @@ function App() {
         onResponseReceived={(response: Item) => setItems([...items, response])}
       ></SingleFileUploader>
       <h1>History</h1>
-      <h5>{"(document name, service used)"}</h5>
+      <h5>{"(document name, service used, message)"}</h5>
       <ul>
         {items.map((item) => {
           return (

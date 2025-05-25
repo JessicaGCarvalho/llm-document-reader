@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import { extractTextFromFile } from "./extractTextFromFile";
 import { LLMResult, promptLLM } from "./promptLLM";
-import { financeService, FinanceServiceInput } from "./services/financeService";
-import { hrService, HrServiceInput } from "./services/hrService";
+import { financeService, FinanceInput } from "./services/financeService";
+import { hrService, HRInput } from "./services/hrService";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,13 +36,14 @@ app.post("/", upload.single("file"), async (req, res) => {
         .json({ error: "Failed to provide service for document." });
       return;
     }
+
     let message;
     switch (result.service) {
       case "financeService":
-        message = financeService(result.input as FinanceServiceInput);
+        message = financeService.run(result.input as FinanceInput);
         break;
       case "hrService":
-        message = hrService(result.input as HrServiceInput);
+        message = hrService.run(result.input as HRInput);
         break;
     }
 
