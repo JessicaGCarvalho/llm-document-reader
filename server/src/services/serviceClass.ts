@@ -30,12 +30,14 @@ export abstract class Service<
   }
 
   isValidInputType(input: TInput): boolean {
+    console.log(input);
     for (const key in this.inputShape) {
       const expectedType = this.inputShape[key];
       const value = input[key];
       if (
-        (expectedType === "string" && typeof value !== "string") ||
-        (expectedType === "number" && typeof value !== "number")
+        value !== null &&
+        ((expectedType === "string" && typeof value !== "string") ||
+          (expectedType === "number" && typeof value !== "number"))
       ) {
         return false;
       }
