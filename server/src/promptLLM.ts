@@ -1,6 +1,10 @@
 import { openai } from "./openai";
 import { financeService } from "./services/financeService";
 import { hrService } from "./services/hrService";
+import { engService } from "./services/engService";
+import { marketingService } from "./services/marketingService";
+import { opService } from "./services/opService";
+
 export type LLMResult =
   | {
       service: string;
@@ -9,7 +13,13 @@ export type LLMResult =
   | "no_matching_service";
 
 export async function promptLLM(documentText: string): Promise<LLMResult> {
-  const serviceList = [financeService, hrService];
+  const serviceList = [
+    financeService,
+    hrService,
+    engService,
+    marketingService,
+    opService,
+  ];
   const systemPrompt = `
     You are an intelligent document classification and extraction assistant. 
     Your task is to analyze a provided document and determine which of the available services it relates to. 
@@ -26,7 +36,7 @@ export async function promptLLM(documentText: string): Promise<LLMResult> {
     - Determine if it closely corresponds to one of the listed services.  
     - If it does, return a valid JSON string using the specified schema for that service.  
     - All fields must be extracted from the content. If a field is missing, make it null.  
-    - If the document doesn’t match any listed service, return exactly: "no_matching_service"
+    - If the document doesn't match any listed service, return exactly: "no_matching_service"
 
     Output:
 

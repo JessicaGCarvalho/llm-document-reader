@@ -7,6 +7,9 @@ import { extractTextFromFile } from "./extractTextFromFile";
 import { LLMResult, promptLLM } from "./promptLLM";
 import { financeService, FinanceInput } from "./services/financeService";
 import { hrService, HRInput } from "./services/hrService";
+import { engService, EngInput } from "./services/engService";
+import { marketingService, MarketingInput } from "./services/marketingService";
+import { opService, OpInput } from "./services/opService";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,6 +47,15 @@ app.post("/", upload.single("file"), async (req, res) => {
         break;
       case "hrService":
         message = hrService.run(result.input as HRInput);
+        break;
+      case "engService":
+        message = engService.run(result.input as EngInput);
+        break;
+      case "marketingService":
+        message = marketingService.run(result.input as MarketingInput);
+        break;
+      case "opService":
+        message = opService.run(result.input as OpInput);
         break;
     }
 
